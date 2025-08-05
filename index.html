@@ -1086,7 +1086,8 @@
             }
             
             .hero {
-                padding-top: 120px;
+                padding-top: 140px; /* Increased to prevent overlap */
+                min-height: 100vh;
             }
             
             .hero-buttons {
@@ -1101,6 +1102,17 @@
             
             .features-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            /* Ensure hero content is properly spaced */
+            .hero h1 {
+                font-size: clamp(2rem, 8vw, 3rem);
+                margin-bottom: 24px;
+            }
+            
+            .hero p {
+                font-size: clamp(1rem, 4vw, 1.25rem);
+                margin-bottom: 32px;
             }
         }
 
@@ -1141,34 +1153,68 @@
                 margin-left: 0 !important;
             }
             
-            nav ul {
+            /* Modern mobile navigation */
+            .nav-links {
                 display: none;
                 position: absolute;
                 top: 100%;
                 left: 0;
                 width: 100%;
                 flex-direction: column;
-                background-color: white;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
                 padding: 20px 0;
+                gap: 0;
+                z-index: 999;
+                border-radius: 0 0 16px 16px;
             }
             
-            nav ul.active {
+            .nav-links.active {
                 display: flex;
             }
             
-            nav ul li {
+            .nav-links li {
                 margin: 0;
                 text-align: center;
             }
             
-            nav ul li a {
+            .nav-links li a {
                 display: block;
-                padding: 12px 0;
+                padding: 16px 20px;
+                font-size: 18px;
+                color: #1e293b;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+            }
+            
+            .nav-links li:last-child a {
+                border-bottom: none;
+            }
+            
+            .nav-links li a:hover {
+                background: rgba(35, 195, 217, 0.05);
+                color: var(--primary);
             }
             
             .mobile-menu {
                 display: flex;
+                flex-direction: column;
+                gap: 4px;
+                cursor: pointer;
+                padding: 8px;
+            }
+            
+            .mobile-menu span {
+                width: 25px;
+                height: 3px;
+                background: var(--primary);
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+            
+            /* Legacy nav ul fallback */
+            nav ul {
+                display: none;
             }
         }
         
@@ -1886,12 +1932,29 @@
             
             // Mobile menu toggle with animation
             const mobileMenuBtn = document.querySelector('.mobile-menu');
-            const navMenu = document.querySelector('nav ul');
+            const navMenu = document.querySelector('.nav-links');
             
-            if (mobileMenuBtn) {
+            if (mobileMenuBtn && navMenu) {
+                // Toggle mobile menu
                 mobileMenuBtn.addEventListener('click', function() {
                     navMenu.classList.toggle('active');
                     mobileMenuBtn.classList.toggle('active');
+                });
+                
+                // Close mobile menu when clicking nav links
+                navMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        navMenu.classList.remove('active');
+                        mobileMenuBtn.classList.remove('active');
+                    });
+                });
+                
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!mobileMenuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+                        navMenu.classList.remove('active');
+                        mobileMenuBtn.classList.remove('active');
+                    }
                 });
             }
             
