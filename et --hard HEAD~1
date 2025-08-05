@@ -1,5 +1,18 @@
-[33m9c486b58[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fix user profile API routes: add missing GET method and correct backend URLs
-[33m817a49c6[m \ MAJOR FIX: Persistent Friend System - No More Data Loss!\n\n Core Issue Resolved:\n-  Fixed in-memory friend storage that reset on server restart\n-  Implemented file-based persistent storage for friendships + requests\n-  Data now survives server restarts and deployments\n-  Seamless migration from existing in-memory system\n\n New Persistent Storage System:\n- lib/dataStorage.ts - Centralized file-based storage utilities\n- data/friendships.json - Persistent friendship records\n- data/friend-requests.json - Persistent friend request records\n- .gitignore updated - Local data files excluded from repo\n\n Updated API Routes:\n- app/api/friends/route.ts - Now uses persistent storage\n- app/api/friends/requests/route.ts - Now uses persistent storage\n- All CRUD operations maintain data across restarts\n\n User Impact:\n-  Friends made on platform now persist permanently\n-  Friend requests don't disappear on server restart\n-  No more lost social connections\n-  Reliable friendship tracking\n\n Technical Benefits:\n- File-based persistence (no database setup required)\n- Automatic directory/file creation\n- Error handling and graceful fallbacks\n- Production-ready solution"
-[33m40fb085a[m  FINAL BUILD SUCCESS: Stripe Integration Build-Safe\n\n Critical Stripe Configuration Fixes:\n-  Made Stripe initialization conditional (null when env vars missing)\n-  Added null safety checks to ALL SubscriptionManager methods  \n-  Added build-time safety checks in API routes (503 when Stripe unavailable)\n-  Fixed duplicate catch blocks causing syntax errors\n-  Graceful environment variable handling for production builds\n\n Build Status:\n-  TypeScript compilation: SUCCESS\n-  Next.js build: SUCCESS\n-  Static page generation: SUCCESS (95/95 pages)\n-  All API routes: FUNCTIONAL\n-  Production deployment: READY\n\n Stripe Integration:\n-  Environment variables: CONFIGURED\n-  Null safety: IMPLEMENTED  \n-  Fallback handling: ACTIVE\n-  Demo mode: PRESERVED\n\n Fixed Files:\n- lib/stripe.ts (conditional init + null checks)\n- app/api/subscriptions/route.ts (null safety + syntax fix)\n- app/api/webhooks/stripe/route.ts (null safety)\n\n Ready for investor demos with full account switching!
-[33m57007afb[m \ Fix final TypeScript errors: function scoping and Stripe API version"
-[33m1d1bb6fd[m \ Fix all remaining currentUser property issues across components"
+  backend[m
+  backend-add-non-versioned-endpoints[m
+  backend-correct[m
+  backend-fix[m
+  backend-fixed[m
+  backend-local[m
+* [32mmain[m
+  master[m
+  onboarding-fixes[m
+  update-cors[m
+  [31mremotes/origin/HEAD[m -> origin/master
+  [31mremotes/origin/backend[m
+  [31mremotes/origin/backend-fix[m
+  [31mremotes/origin/backend-fixed[m
+  [31mremotes/origin/clean-branch[m
+  [31mremotes/origin/main[m
+  [31mremotes/origin/master[m
+  [31mremotes/origin/update-cors[m
