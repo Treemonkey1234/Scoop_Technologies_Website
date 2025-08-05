@@ -1,0 +1,330 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/api/admin/events/search/[title]",
+      "regex": "^/api/admin/events/search/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPtitle": "nxtPtitle"
+      },
+      "namedRegex": "^/api/admin/events/search/(?<nxtPtitle>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/admin/events/[id]",
+      "regex": "^/api/admin/events/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/events/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/admin/users/username/[username]",
+      "regex": "^/api/admin/users/username/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPusername": "nxtPusername"
+      },
+      "namedRegex": "^/api/admin/users/username/(?<nxtPusername>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/admin/users/[id]",
+      "regex": "^/api/admin/users/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/users/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/auth/[...auth0]",
+      "regex": "^/api/auth/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPauth0": "nxtPauth0"
+      },
+      "namedRegex": "^/api/auth/(?<nxtPauth0>.+?)(?:/)?$"
+    },
+    {
+      "page": "/comments/[id]",
+      "regex": "^/comments/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/comments/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/events/[id]",
+      "regex": "^/events/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/events/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/friends/[id]",
+      "regex": "^/friends/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/friends/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/user/[id]",
+      "regex": "^/user/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/user/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/admin/data-viewer",
+      "regex": "^/admin/data\\-viewer(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/data\\-viewer(?:/)?$"
+    },
+    {
+      "page": "/admin/debug",
+      "regex": "^/admin/debug(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/debug(?:/)?$"
+    },
+    {
+      "page": "/admin/event-management",
+      "regex": "^/admin/event\\-management(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/event\\-management(?:/)?$"
+    },
+    {
+      "page": "/admin/user-management",
+      "regex": "^/admin/user\\-management(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/user\\-management(?:/)?$"
+    },
+    {
+      "page": "/admin/users",
+      "regex": "^/admin/users(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/users(?:/)?$"
+    },
+    {
+      "page": "/analytics",
+      "regex": "^/analytics(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/analytics(?:/)?$"
+    },
+    {
+      "page": "/billing",
+      "regex": "^/billing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/billing(?:/)?$"
+    },
+    {
+      "page": "/connected-accounts",
+      "regex": "^/connected\\-accounts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/connected\\-accounts(?:/)?$"
+    },
+    {
+      "page": "/create-event",
+      "regex": "^/create\\-event(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/create\\-event(?:/)?$"
+    },
+    {
+      "page": "/create-post",
+      "regex": "^/create\\-post(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/create\\-post(?:/)?$"
+    },
+    {
+      "page": "/debug-auth",
+      "regex": "^/debug\\-auth(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/debug\\-auth(?:/)?$"
+    },
+    {
+      "page": "/events",
+      "regex": "^/events(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/events(?:/)?$"
+    },
+    {
+      "page": "/forgot-password",
+      "regex": "^/forgot\\-password(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/forgot\\-password(?:/)?$"
+    },
+    {
+      "page": "/friends",
+      "regex": "^/friends(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/friends(?:/)?$"
+    },
+    {
+      "page": "/help",
+      "regex": "^/help(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/help(?:/)?$"
+    },
+    {
+      "page": "/invite",
+      "regex": "^/invite(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/invite(?:/)?$"
+    },
+    {
+      "page": "/moderator",
+      "regex": "^/moderator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/moderator(?:/)?$"
+    },
+    {
+      "page": "/my-events",
+      "regex": "^/my\\-events(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/my\\-events(?:/)?$"
+    },
+    {
+      "page": "/notifications",
+      "regex": "^/notifications(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/notifications(?:/)?$"
+    },
+    {
+      "page": "/onboarding",
+      "regex": "^/onboarding(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/onboarding(?:/)?$"
+    },
+    {
+      "page": "/phone-verification",
+      "regex": "^/phone\\-verification(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/phone\\-verification(?:/)?$"
+    },
+    {
+      "page": "/privacy",
+      "regex": "^/privacy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/privacy(?:/)?$"
+    },
+    {
+      "page": "/profile",
+      "regex": "^/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/profile/edit",
+      "regex": "^/profile/edit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile/edit(?:/)?$"
+    },
+    {
+      "page": "/profile/reviews",
+      "regex": "^/profile/reviews(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile/reviews(?:/)?$"
+    },
+    {
+      "page": "/search",
+      "regex": "^/search(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/search(?:/)?$"
+    },
+    {
+      "page": "/settings",
+      "regex": "^/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/settings(?:/)?$"
+    },
+    {
+      "page": "/settings/unified-profile-engine",
+      "regex": "^/settings/unified\\-profile\\-engine(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/settings/unified\\-profile\\-engine(?:/)?$"
+    },
+    {
+      "page": "/signin",
+      "regex": "^/signin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signin(?:/)?$"
+    },
+    {
+      "page": "/signup",
+      "regex": "^/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signup(?:/)?$"
+    },
+    {
+      "page": "/terms",
+      "regex": "^/terms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/terms(?:/)?$"
+    },
+    {
+      "page": "/test-auth",
+      "regex": "^/test\\-auth(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/test\\-auth(?:/)?$"
+    },
+    {
+      "page": "/test-jwt",
+      "regex": "^/test\\-jwt(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/test\\-jwt(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "RSC",
+    "varyHeader": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch",
+    "prefetchHeader": "Next-Router-Prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "Next-Router-Segment-Prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
