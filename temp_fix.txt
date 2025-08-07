@@ -1,0 +1,57 @@
+      console.log('💾 Saving profile data:', formData)
+
+      // Create final payload using explicit TypeScript-safe approach
+      interface CleanProfilePayload {
+        name?: string
+        email?: string
+        phone?: string
+        bio?: string
+        location?: string
+        website?: string
+        birthDate?: string
+        gender?: string
+        occupation?: string
+        company?: string
+        interests?: string[]
+        updateType: string
+        timestamp: string
+      }
+
+      const finalPayload: CleanProfilePayload = {
+        updateType: 'profile_data',
+        timestamp: new Date().toISOString()
+      }
+      
+      // Explicit assignment (TypeScript-safe)
+      const cleanName = formData.fullName?.trim()
+      if (cleanName && cleanName !== '') finalPayload.name = cleanName
+      
+      const cleanEmail = formData.email?.trim()
+      if (cleanEmail && cleanEmail !== '') finalPayload.email = cleanEmail
+      
+      const cleanPhone = formData.phone?.trim()
+      if (cleanPhone && cleanPhone !== '') finalPayload.phone = cleanPhone
+      
+      const cleanBio = formData.bio?.trim()
+      if (cleanBio && cleanBio !== '') finalPayload.bio = cleanBio
+      
+      const cleanLocation = formData.location?.trim()
+      if (cleanLocation && cleanLocation !== '') finalPayload.location = cleanLocation
+      
+      const cleanWebsite = formData.website?.trim()
+      if (cleanWebsite && cleanWebsite !== '') finalPayload.website = cleanWebsite
+      
+      if (formData.birthDate) finalPayload.birthDate = formData.birthDate
+      if (formData.gender) finalPayload.gender = formData.gender
+      
+      const cleanOccupation = formData.occupation?.trim()
+      if (cleanOccupation && cleanOccupation !== '') finalPayload.occupation = cleanOccupation
+      
+      const cleanCompany = formData.company?.trim()
+      if (cleanCompany && cleanCompany !== '') finalPayload.company = cleanCompany
+      
+      if (Array.isArray(formData.interests) && formData.interests.length > 0) {
+        finalPayload.interests = formData.interests
+      }
+
+      console.log('📤 Sending profile update:', finalPayload)

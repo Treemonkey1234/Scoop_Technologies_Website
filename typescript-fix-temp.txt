@@ -1,0 +1,9 @@
+// TYPESCRIPT FIX - Replace this section in profile edit page
+
+      // Clean payload by removing empty values (TypeScript-safe approach)
+      const finalPayload: Record<string, any> = {}
+      for (const [fieldKey, fieldValue] of Object.entries(updatePayload)) {
+        if (fieldValue !== '' && fieldValue !== undefined && fieldValue !== null) {
+          finalPayload[fieldKey] = fieldValue
+        }
+      }

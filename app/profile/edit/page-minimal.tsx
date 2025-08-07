@@ -4,6 +4,17 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Layout from '../../../components/Layout'
 import { useAuth } from '@/hooks/useAuth'
+import {
+  UserIcon,
+  CameraIcon,
+  MapPinIcon,
+  PhoneIcon,
+  EnvelopeIcon,
+  LinkIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  CheckIcon
+} from '@heroicons/react/24/outline'
 
 export default function EditProfilePage() {
   const router = useRouter()
@@ -28,6 +39,7 @@ export default function EditProfilePage() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Authentication check
   useEffect(() => {
     if (!authLoading) {
       if (!authState.isAuthenticated) {
@@ -38,12 +50,14 @@ export default function EditProfilePage() {
     }
   }, [authLoading, authState.isAuthenticated, router])
 
+  // MINIMAL TYPESCRIPT-SAFE FORM SUBMISSION
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError(null)
 
     try {
+      // Basic validation
       if (!formData.fullName || formData.fullName.trim().length === 0) {
         setError('Full name is required')
         setIsLoading(false)
@@ -56,41 +70,46 @@ export default function EditProfilePage() {
         return
       }
 
-      const submitPayload = {
+      // Create payload with EXPLICIT TypeScript-safe approach (NO dynamic indexing)
+      const payload = {
         name: formData.fullName.trim(),
         email: formData.email.trim(),
         updateType: 'profile_data',
         timestamp: new Date().toISOString()
       }
 
+      // Add optional fields explicitly (TypeScript-safe)
       if (formData.phone && formData.phone.trim()) {
-        (submitPayload as any).phone = formData.phone.trim()
+        (payload as any).phone = formData.phone.trim()
       }
       if (formData.bio && formData.bio.trim()) {
-        (submitPayload as any).bio = formData.bio.trim()
+        (payload as any).bio = formData.bio.trim()
       }
       if (formData.location && formData.location.trim()) {
-        (submitPayload as any).location = formData.location.trim()
+        (payload as any).location = formData.location.trim()
       }
       if (formData.website && formData.website.trim()) {
-        (submitPayload as any).website = formData.website.trim()
+        (payload as any).website = formData.website.trim()
       }
       if (formData.birthDate) {
-        (submitPayload as any).birthDate = formData.birthDate
+        (payload as any).birthDate = formData.birthDate
       }
       if (formData.gender) {
-        (submitPayload as any).gender = formData.gender
+        (payload as any).gender = formData.gender
       }
       if (formData.occupation && formData.occupation.trim()) {
-        (submitPayload as any).occupation = formData.occupation.trim()
+        (payload as any).occupation = formData.occupation.trim()
       }
       if (formData.company && formData.company.trim()) {
-        (submitPayload as any).company = formData.company.trim()
+        (payload as any).company = formData.company.trim()
       }
       if (formData.interests && formData.interests.length > 0) {
-        (submitPayload as any).interests = formData.interests
+        (payload as any).interests = formData.interests
       }
 
+      console.log('📤 Sending profile update:', payload)
+
+      // Simple fetch request
       const response = await fetch('/api/profile/update', {
         method: 'PUT',
         headers: {
@@ -98,13 +117,13 @@ export default function EditProfilePage() {
           'Accept': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(submitPayload)
+        body: JSON.stringify(payload)
       })
 
       if (response.ok) {
         const result = await response.json()
         if (result.success) {
-          console.log('Profile updated successfully')
+          console.log('✅ Profile updated successfully')
           setShowSuccessMessage(true)
           setTimeout(() => setShowSuccessMessage(false), 3000)
         } else {
@@ -115,7 +134,7 @@ export default function EditProfilePage() {
       }
 
     } catch (error) {
-      console.error('Profile update error:', error)
+      console.error('❌ Profile update error:', error)
       setError((error as Error).message || 'Failed to save profile changes')
     } finally {
       setIsLoading(false)
@@ -149,7 +168,7 @@ export default function EditProfilePage() {
 
           {showSuccessMessage && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <p className="text-green-800">Profile updated successfully!</p>
+              <p className="text-green-800">✅ Profile updated successfully!</p>
             </div>
           )}
 

@@ -28,6 +28,7 @@ export default function EditProfilePage() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Authentication check
   useEffect(() => {
     if (!authLoading) {
       if (!authState.isAuthenticated) {
@@ -38,12 +39,14 @@ export default function EditProfilePage() {
     }
   }, [authLoading, authState.isAuthenticated, router])
 
+  // COMPLETELY NEW TYPESCRIPT-SAFE FORM SUBMISSION
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError(null)
 
     try {
+      // Basic validation
       if (!formData.fullName || formData.fullName.trim().length === 0) {
         setError('Full name is required')
         setIsLoading(false)
@@ -56,6 +59,7 @@ export default function EditProfilePage() {
         return
       }
 
+      // Create payload - ZERO dynamic indexing, ZERO Object.keys, ZERO problematic patterns
       const submitPayload = {
         name: formData.fullName.trim(),
         email: formData.email.trim(),
@@ -63,6 +67,7 @@ export default function EditProfilePage() {
         timestamp: new Date().toISOString()
       }
 
+      // Add optional fields with explicit TypeScript-safe approach
       if (formData.phone && formData.phone.trim()) {
         (submitPayload as any).phone = formData.phone.trim()
       }
@@ -91,6 +96,9 @@ export default function EditProfilePage() {
         (submitPayload as any).interests = formData.interests
       }
 
+      console.log('📤 Sending profile update:', submitPayload)
+
+      // Simple fetch request with no retry logic to avoid complexity
       const response = await fetch('/api/profile/update', {
         method: 'PUT',
         headers: {
@@ -104,7 +112,7 @@ export default function EditProfilePage() {
       if (response.ok) {
         const result = await response.json()
         if (result.success) {
-          console.log('Profile updated successfully')
+          console.log('✅ Profile updated successfully')
           setShowSuccessMessage(true)
           setTimeout(() => setShowSuccessMessage(false), 3000)
         } else {
@@ -115,7 +123,7 @@ export default function EditProfilePage() {
       }
 
     } catch (error) {
-      console.error('Profile update error:', error)
+      console.error('❌ Profile update error:', error)
       setError((error as Error).message || 'Failed to save profile changes')
     } finally {
       setIsLoading(false)
@@ -149,7 +157,7 @@ export default function EditProfilePage() {
 
           {showSuccessMessage && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <p className="text-green-800">Profile updated successfully!</p>
+              <p className="text-green-800">✅ Profile updated successfully!</p>
             </div>
           )}
 

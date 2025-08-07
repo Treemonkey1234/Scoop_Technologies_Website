@@ -11,7 +11,10 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Layout from '../../components/Layout'
 import { useAuth } from '@/hooks/useAuth'
-import { trustScoreManager } from '@/lib/enhanced-trustScoreCalculator'
+import { ultimateTrustScoreSystem, calculateTrustScore, getTrustScoreDisplay } from '@/lib/ultimate-trust-score-system'
+import 'mapbox-gl/dist/mapbox-gl.css'
+import mapboxgl from 'mapbox-gl'
+import { initializeMapboxMap, normalizeCoordinates } from '@/lib/mapboxOptimized'
 import {
   MapPinIcon,
   CalendarIcon,
@@ -64,6 +67,8 @@ export default function DiscoverPage() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map')
+  const [map, setMap] = useState<any>(null)
+  const [markers, setMarkers] = useState<any[]>([])
 
   // Filter options
   const categories = [
@@ -114,6 +119,20 @@ export default function DiscoverPage() {
     filterEvents()
   }, [events, searchQuery, selectedCategory])
 
+  // Initialize map when component mounts and user location is available
+  useEffect(() => {
+    if (userLocation && mapContainerRef.current && !map) {
+      initializeMap()
+    }
+  }, [userLocation, map])
+
+  // Update markers when filtered events change
+  useEffect(() => {
+    if (map && filteredEvents.length > 0) {
+      updateMapMarkers()
+    }
+  }, [map, filteredEvents])
+
   const loadEvents = async () => {
     try {
       setIsLoading(true)
@@ -126,10 +145,16 @@ export default function DiscoverPage() {
       if (response.ok) {
         const data = await response.json()
         
-        // Filter out past events
+        // Filter out past events with better date handling
         const currentEvents = data.events.filter((event: Event) => {
           const eventDate = new Date(event.startDate)
           const now = new Date()
+          
+          // Set now to start of current day for proper comparison
+          now.setHours(0, 0, 0, 0)
+          
+          console.log(`📅 Event "${event.title}": ${eventDate.toISOString()} vs Now: ${now.toISOString()}`)
+          
           return eventDate >= now
         })
 
@@ -224,6 +249,120 @@ export default function DiscoverPage() {
       console.error('Error joining event:', error)
       alert('Failed to join event')
     }
+  }
+
+  const initializeMap = async () => {
+    try {
+      console.log('🗺️ Initializing Discover Map...')
+      
+      if (!mapContainerRef.current || !userLocation) {
+        console.log('❌ Missing map container or user location')
+        return
+      }
+
+      const mapInstance = await initializeMapboxMap(
+        mapContainerRef.current,
+        [userLocation.lng, userLocation.lat],
+        {
+          zoom: 12,
+          style: 'mapbox://styles/mapbox/streets-v12'
+        }
+      )
+
+      setMap(mapInstance)
+      console.log('✅ Discover map initialized successfully')
+    } catch (error) {
+      console.error('❌ Error initializing map:', error)
+    }
+  }
+
+  const updateMapMarkers = () => {
+    if (!map) return
+    
+    // Clear existing markers
+    markers.forEach(marker => marker.remove())
+    setMarkers([])
+
+    const newMarkers: any[] = []
+
+    filteredEvents.forEach((event: Event) => {
+      if (!event.location?.latitude || !event.location?.longitude) {
+        console.warn(`⚠️ Event "${event.title}" missing coordinates`)
+        return
+      }
+
+      // Normalize coordinates to ensure proper format
+      const [lng, lat] = normalizeCoordinates(event.location.longitude, event.location.latitude)
+      
+      console.log(`📍 Adding marker for "${event.title}" at [${lng}, ${lat}]`)
+
+      // Create marker with proper anchoring to fix floating issue
+      const marker = new mapboxgl.Marker({
+        anchor: 'bottom',
+        offset: [0, 0]
+      })
+        .setLngLat([lng, lat])
+        .addTo(map)
+
+      // Add popup with event details
+      const popup = new mapboxgl.Popup({
+        offset: [0, -50],
+        closeButton: true,
+        closeOnClick: true
+      })
+        .setHTML(`
+          <div class="p-4 min-w-[280px] max-w-sm">
+            <h3 class="font-semibold text-slate-800 mb-2 leading-tight">${event.title}</h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">${event.description}</p>
+            
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center text-xs text-slate-500">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span class="truncate">${event.location?.address || event.address || event.location?.name || 'Location not specified'}</span>
+              </div>
+              
+              <div class="flex items-center text-xs text-slate-500">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span>${new Date(event.startDate).toLocaleDateString()} at ${event.startTime || 'Time TBD'}</span>
+              </div>
+              
+              <div class="flex items-center text-xs text-slate-500">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+                <span class="px-2 py-1 bg-slate-100 rounded text-xs">${event.category}</span>
+              </div>
+              
+              ${event.price && event.price > 0 ? `
+                <div class="flex items-center text-xs text-slate-500">
+                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                  </svg>
+                  <span>$${event.price}</span>
+                </div>
+              ` : ''}
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-cyan-600 font-medium">${event.attendeeCount || 0} attending</span>
+              <button onclick="window.location.href='/events/${event.id}'" class="px-3 py-1.5 bg-cyan-500 text-white text-xs rounded-md hover:bg-cyan-600 transition-colors">
+                View Details
+              </button>
+            </div>
+          </div>
+        `)
+
+      marker.setPopup(popup)
+      newMarkers.push(marker)
+    })
+
+    setMarkers(newMarkers)
+    console.log(`✅ Added ${newMarkers.length} markers to discover map`)
   }
 
   if (authLoading || isLoading) {
@@ -379,14 +518,8 @@ export default function DiscoverPage() {
           ) : (
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               {/* Map Container */}
-              <div ref={mapContainerRef} className="h-96 bg-gray-200 flex items-center justify-center">
-                <div className="text-center">
-                  <MapPinIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">Map integration coming soon</p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    {filteredEvents.length} events found
-                  </p>
-                </div>
+              <div ref={mapContainerRef} className="h-96 bg-gray-200 relative">
+                {/* Mapbox will render here */}
               </div>
               
               {/* Selected Event Details */}
