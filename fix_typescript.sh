@@ -9,3 +9,7 @@ git commit -m "🔧 Fix TypeScript error - Add User interface and remove sample 
 - Remove sample data imports from profile page
 - Ensure type safety for deployment"
 git push origin main
+
+
+
+

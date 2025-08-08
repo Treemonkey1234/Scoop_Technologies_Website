@@ -13,8 +13,10 @@ import Layout from '../../components/Layout'
 import { useAuth } from '@/hooks/useAuth'
 import { ultimateTrustScoreSystem, calculateTrustScore, getTrustScoreDisplay } from '@/lib/ultimate-trust-score-system'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import mapboxgl from 'mapbox-gl'
-import { initializeMapboxMap, normalizeCoordinates } from '@/lib/mapboxOptimized'
+// import mapboxgl from 'mapbox-gl'
+// import { initializeMapboxMap, normalizeCoordinates } from '@/lib/mapboxOptimized'
+import { initializeMapboxMap } from '@/lib/mapboxOptimized'
+import { initializeMapboxGL } from '@/lib/mapboxConfig'
 import {
   MapPinIcon,
   CalendarIcon,
@@ -292,12 +294,19 @@ export default function DiscoverPage() {
       }
 
       // Normalize coordinates to ensure proper format
-      const [lng, lat] = normalizeCoordinates(event.location.longitude, event.location.latitude)
+      // const [lng, lat] = normalizeCoordinates(event.location.longitude, event.location.latitude)
+      const lng = Number(event.location.longitude)
+      const lat = Number(event.location.latitude)
       
       console.log(`📍 Adding marker for "${event.title}" at [${lng}, ${lat}]`)
 
       // Create marker with proper anchoring to fix floating issue
-      const marker = new mapboxgl.Marker({
+      // const marker = new mapboxgl.Marker({
+      //   anchor: 'bottom',
+      //   offset: [0, 0]
+      // })
+      const mbgl = initializeMapboxGL()
+      const marker = new mbgl.Marker({
         anchor: 'bottom',
         offset: [0, 0]
       })
